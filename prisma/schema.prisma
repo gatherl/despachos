@@ -1,0 +1,77 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // You can change this to your preferred database
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  password  String
+  email     String    @unique
+  role      Role      @default(USER)
+  packages  Package[] @relation("SenderPackages")
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Package {
+  id             Int              @id @default(autoincrement())
+  destination    String
+  origin         String
+  size           String
+  weight         Float
+  tracking_id    String           @unique @default(uuid())
+  state          String
+  state_date     DateTime
+  creation_date  DateTime         @default(now())
+  courier        Courier?         @relation(fields: [courier_id], references: [id])
+  courier_id     Int?
+  sender         User             @relation("SenderPackages", fields: [sender_id], references: [id])
+  sender_id      Int
+  packageLogs    PackageLog[]
+  courierPackages CourierPackage[]
+
+  @@map("packages")
+}
+
+model Courier {
+  id              Int              @id @default(autoincrement())
+  name            String
+  packages        Package[]
+  courierPackages CourierPackage[]
+
+  @@map("couriers")
+}
+
+model PackageLog {
+  id          Int      @id @default(autoincrement())
+  package     Package  @relation(fields: [package_id], references: [id])
+  package_id  Int
+  old_package Json?
+  new_package Json?
+  action      String
+  date        DateTime @default(now())
+
+  @@map("package_log")
+}
+
+model CourierPackage {
+  id                 Int     @id @default(autoincrement())
+  package            Package @relation(fields: [package_id], references: [id])
+  package_id         Int
+  courier            Courier @relation(fields: [courier_id], references: [id])
+  courier_id         Int
+  courier_package_id String?
+
+  @@map("courier_packages")
+}
