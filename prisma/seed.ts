@@ -11,7 +11,7 @@ async function main() {
     prisma.courier.deleteMany({}),
     prisma.user.deleteMany({}),
   ]);
-
+  // Test commit
   console.log('Database cleaned');
 
   // Create users with different roles
