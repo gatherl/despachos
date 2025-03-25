@@ -2,6 +2,7 @@ Let's define our priorities first:
 
 1. We will work on an agile manner, first try to provide value to the user as fast as possible
 2. Integrations are the most valuable thing for the user, so having the system integrated with OCA is top prio
+   1. We have reviewed the state and the only service used is door to door, even though they also have the door to branch option
 3. Once a week we will provide demos/videos to the client for fast feedback and quick small changes
 4. Tasks should be small enough to work on an iterative manner
 5. Each iteration will be a week
@@ -46,3 +47,28 @@ Post-mvp
 Out of scope:
 
 1. Mail notifications for when an Order has been created, or a package delivered
+
+## OCA API docs
+
+Integration with OCA using URL
+http://webservice.oca.com.ar/ePak_Tracking_TEST/Oep_TrackEPak.asmx/IngresoORMultiplesRetiros', `usr=test@oca.com.ar&psw=123456&xml_Datos=${encodeURIComponent(xml)}&ConfirmarRetiro=false&ArchivoCliente=string&ArchivoProceso=string
+
+Datos para pruebas
+URLS
+http://webservice.oca.com.ar/ePak_Tracking_TEST/
+http://webservice.oca.com.ar/OEP_Tracking_TEST/
+USUARIOS
+test@oca.com.ar
+CLAVE
+123456
+NRO. DE CUENTA
+111757/001
+OPERATIVAS
+Puerta a Puerta: 64665
+Puerta a Sucursal: 62342
+Sucursal a Puerta: 94584
+Sucursal a Sucursal: 78254
+Logística Inversa Puerta a Puerta: 260708
+Logística Inversa Sucursal a Puerta: 260709
+CUIT
+30-53625919-4
