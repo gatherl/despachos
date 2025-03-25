@@ -89,6 +89,8 @@ export interface OcaXmlCabecera {
   // Configuration for OCA e-Pak API
   export interface OcaEpakConfig {
     baseUrl: string;
+    epakTrackingUrl: string;
+    oepTrackingUrl: string;
     username: string;
     password: string;
     accountNumber: string;

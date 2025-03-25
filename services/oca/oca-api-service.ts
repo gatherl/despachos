@@ -1,5 +1,7 @@
 import { OcaEpakConfig, OcaOrigen, OcaShipmentRequest, OcaShipmentResponse } from '@/types/oca-epak';
 import { XmlService } from './xml-service';
+import { ENDPOINTS, getEndpointUrl } from './endpoints';
+import { Environment, ENVIRONMENTS } from './environment';
 
 /**
  * OCA e-PAK API service
@@ -38,9 +40,8 @@ export class OcaApiService {
       formData.append('ConfirmarRetiro', confirmRetrieval ? 'true' : 'false');
       formData.append('ArchivoCliente', ''); // Internal use, don't complete
       formData.append('ArchivoProceso', ''); // Internal use, don't complete
-      
       // Make the API call
-      const response = await fetch(`${this.config.baseUrl}/IngresoORMultiplesRetiros`, {
+      const response = await fetch(`${getEndpointUrl(this.config.baseUrl,this.config.epakTrackingUrl, ENDPOINTS.EPAK.CREATE_SHIPMENT)}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -88,9 +89,10 @@ export const getOcaApiService = (): OcaApiService => {
       username: process.env.OCA_USERNAME || '',
       password: process.env.OCA_PASSWORD || '',
       accountNumber: process.env.OCA_ACCOUNT_NUMBER || '',
-      baseUrl: process.env.OCA_BASE_URL || '',
       cuit: process.env.DESPACHOS_ONLINE_CUIT || '',
       operationId: process.env.OCA_DOOR_TO_DOOR_OPERATIVE_ID || '',
+      // Get base url & others from the envs
+      ...ENVIRONMENTS[process.env.OCA_ENV as Environment || Environment.TEST],
     };
     
     ocaApiService = new OcaApiService(config);

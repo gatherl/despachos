@@ -92,7 +92,8 @@ function createOcaShipmentRequestFromData(data: any): OcaShipmentRequest {
         fecha: formattedDate,
         envios: [
           {
-            idoperativa: operationId, // Default operation ID
+            // TODO: Change this to a better way to get this data from the package orders
+            idoperativa: process.env.OCA_DOOR_TO_DOOR_OPERATIVE_ID || '', // Default operation ID
             nroremito: data.remitNumber || `REM-${randomUUID().slice(0, 8)}`,
             cantidadremitos: 1,
             destinatario: {
