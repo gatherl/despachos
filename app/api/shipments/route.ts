@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient, ShipmentState, PaymentStatus, LogAction, PackageType } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import QRCode from 'qrcode';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/route';
 
 // Create a new Prisma client
 const prisma = new PrismaClient();
@@ -10,18 +12,42 @@ const prisma = new PrismaClient();
 // GET all shipments
 export async function GET(request: NextRequest) {
   try {
+    // Get query parameters
     const { searchParams } = new URL(request.url);
-    const trackingId = searchParams.get('tracking_id');
+    const tracking_id = searchParams.get('tracking_id');
+    const state = searchParams.get('state');
     
-    if (trackingId) {
-      // Find by tracking ID
+    // If tracking ID is provided, redirect to the dedicated tracking endpoint
+    // or handle it here if you prefer
+    if (tracking_id) {
+      // Option 1: Redirect to the dedicated tracking endpoint
+      // return NextResponse.redirect(`/api/tracking?tracking_id=${tracking_id}`);
+      
+      // Option 2: Handle it directly here for backward compatibility
       const shipment = await prisma.shipment.findUnique({
-        where: { tracking_id: trackingId },
+        where: { tracking_id },
         include: {
-          transportist: true,
-          courier: true,
-          shipmentLogs: true,
-          packages: true
+          shipmentLogs: {
+            select: {
+              date: true,
+              new_shipment: true
+            },
+            orderBy: {
+              date: 'asc'
+            }
+          },
+          packages: {
+            select: {
+              id: true,
+              weight: true,
+              package_type: true
+            }
+          },
+          courier: {
+            select: {
+              name: true
+            }
+          }
         },
       });
       
@@ -32,18 +58,57 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(shipment);
     }
     
-    // Get all shipments
+    // For all other operations, require authentication
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
+    // Check role-based access
+    const userRole = session.user.role;
+    if (userRole !== 'ADMIN' && userRole !== 'EMPLOYEE' && userRole !== 'TRANSPORTIST') {
+      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
+    }
+    
+    // Build where clause based on filters
+    let whereClause: any = {};
+    
+    // Filter by state if provided
+    if (state) {
+      whereClause.state = state;
+    }
+    
+    // For transportists, only show their shipments
+    if (userRole === 'TRANSPORTIST') {
+      whereClause.transportist_id = session.user.id;
+    }
+    
+    // Get filtered shipments
     const shipments = await prisma.shipment.findMany({
+      where: whereClause,
       include: {
         transportist: {
           select: {
             id: true,
             name: true,
-            email: true,
           },
         },
-        courier: true,
-        packages: true
+        courier: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        packages: {
+          select: {
+            id: true,
+            weight: true,
+            package_type: true,
+          },
+        },
+      },
+      orderBy: {
+        creation_date: 'desc',
       },
     });
     
