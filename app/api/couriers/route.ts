@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   try {
     const couriers = await prisma.courier.findMany({
       include: {
-        packages: {
+        shipments: {
           select: {
             id: true,
             tracking_id: true,

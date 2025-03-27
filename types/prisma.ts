@@ -1,20 +1,22 @@
 // Import types directly from Prisma client
 import { 
   User,
+  Shipment,
   Package,
   Courier,
-  CourierPackage,
-  PackageLog,
+  CourierShipment,
+  ShipmentLog,
   Role
 } from '@prisma/client';
 
 // Re-export Prisma types
 export type {
   User,
+  Shipment,
   Package,
   Courier,
-  CourierPackage, 
-  PackageLog,
+  CourierShipment, 
+  ShipmentLog,
   Role
 };
 
@@ -22,22 +24,23 @@ export type {
 export type UserWithoutPassword = Omit<User, 'password'>;
 
 // Enhanced types with relations
-export interface UserWithPackages extends User {
-  packages: Package[];
-  received: Package[];
+export interface UserWithShipments extends User {
+  shipments: Shipment[];
+  received: Shipment[];
 }
 
-export interface PackageWithRelations extends Package {
+export interface ShipmentWithRelations extends Shipment {
   sender: User;
   receiver: User;
   courier?: Courier;
-  packageLogs?: PackageLog[];
-  courierPackages?: CourierPackage[];
+  packages: Package[];
+  shipmentLogs?: ShipmentLog[];
+  courierShipments?: CourierShipment[];
 }
 
-export interface CourierWithPackages extends Courier {
-  packages: Package[];
-  courierPackages: CourierPackage[];
+export interface CourierWithShipments extends Courier {
+  shipments: Shipment[];
+  courierShipments: CourierShipment[];
 }
 
 // API response types
@@ -48,42 +51,44 @@ export interface ApiResponse<T> {
 }
 
 // Form input types (for creating/updating records)
-export interface PackageInput {
-  size: string;
-  weight: number;
+export interface ShipmentInput {
   tracking_id?: string; // Optional as it might be auto-generated
   state?: string;
   state_date?: Date;
   sender_id: string;
   receiver_id: string;
   courier_id?: string;
+  transportist_id?: string;
   destination_zip_code: string;
   destination_street: string;
-  destination_floor: string;
+  destination_street_number: string;
+  destination_floor?: string;
+  destination_apartment?: string;
   destination_city: string;
   destination_state: string;
-  destination_country: string;
-  destination_apartment?: string;
-  destination_btw_st_1: string;
-  destination_btw_st_2: string;
   origin_zip_code: string;
   origin_street: string;
-  origin_floor: string;
+  origin_street_number: string;
+  origin_floor?: string;
+  origin_apartment?: string;
   origin_city: string;
   origin_state: string;
-  origin_country: string;
-  origin_apartment: string;
-  origin_btw_st_1: string;
-  origin_btw_st_2: string;
   details?: string;
-  units_value: number;
-  units_number: number;
+  payment: string;
+}
+
+export interface PackageInput {
+  weight: number;
+  height?: number;
+  width?: number;
+  length?: number;
+  shipment_id: string;
   package_type: string;
 }
 
 export interface UserInput {
-  dni: string;
-  cult: string;
+  dni?: string;
+  cult?: string;
   name: string;
   password?: string;
   email?: string;

@@ -22,23 +22,23 @@ export default function TrackingPage() {
     setError(null);
     
     try {
-      // Search for package by tracking ID
-      const response = await fetch(`/api/packages?tracking_id=${trackingId}`);
+      // Search for shipment by tracking ID
+      const response = await fetch(`/api/shipments?tracking_id=${trackingId}`);
       
       if (!response.ok) {
         if (response.status === 404) {
-          setError('Package not found. Please check your tracking number and try again.');
+          setError('Shipment not found. Please check your tracking number and try again.');
         } else {
-          throw new Error('Failed to search for package');
+          throw new Error('Failed to search for shipment');
         }
         setLoading(false);
         return;
       }
       
-      const packageData = await response.json();
-      router.push(`/packages/${packageData.id}`);
+      const shipmentData = await response.json();
+      router.push(`/shipments/${shipmentData.id}`);
     } catch (err) {
-      setError('An error occurred while searching for your package. Please try again.');
+      setError('An error occurred while searching for your shipment. Please try again.');
       console.error(err);
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export default function TrackingPage() {
               </svg>
             </div>
           </div>
-          <h1 className="mt-6 text-3xl font-extrabold text-gray-900">Track Your Package</h1>
+          <h1 className="mt-6 text-3xl font-extrabold text-gray-900">Track Your Shipment</h1>
           <p className="mt-2 text-sm text-gray-600">
             Enter your tracking number to get real-time updates on your delivery
           </p>
@@ -110,7 +110,7 @@ export default function TrackingPage() {
                     </svg>
                     <span>Searching...</span>
                   </>
-                ) : "Track Package"}
+                ) : "Track Shipment"}
               </button>
             </div>
           </form>
@@ -142,7 +142,7 @@ export default function TrackingPage() {
           <div className="text-center">
             <h2 className="text-lg font-medium text-gray-900">Need Help?</h2>
             <p className="mt-2 text-sm text-gray-600">
-              If you're having trouble tracking your package, please contact our customer service team.
+              If you're having trouble tracking your shipment, please contact our customer service team.
             </p>
             <p className="mt-1 text-sm text-gray-500">
               Customer Service: support@example.com
@@ -167,7 +167,7 @@ export default function TrackingPage() {
             <div>
               <h3 className="text-sm font-medium text-gray-900">How often is tracking information updated?</h3>
               <p className="mt-1 text-sm text-gray-600">
-                Tracking information is typically updated once per day, but may update more frequently as the package nears delivery.
+                Tracking information is typically updated once per day, but may update more frequently as the shipment nears delivery.
               </p>
             </div>
             

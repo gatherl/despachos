@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function Homepage() {
   const [trackingId, setTrackingId] = useState('');
@@ -24,10 +23,10 @@ export default function Homepage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-                Fast, Reliable Package Delivery
+                Fast, Reliable Shipment Delivery
               </h1>
               <p className="mt-4 text-lg md:text-xl text-blue-100">
-                Track your packages in real-time and get updates every step of the way.
+                Track your shipments in real-time and get updates every step of the way.
               </p>
               
               {/* Quick Tracking Form */}
@@ -49,7 +48,7 @@ export default function Homepage() {
                       type="submit"
                       className="block w-full rounded-md bg-blue-500 py-3 px-4 font-medium text-white shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600"
                     >
-                      Track Package
+                      Track Shipment
                     </button>
                   </div>
                 </form>
@@ -91,7 +90,7 @@ export default function Homepage() {
               </div>
               <h3 className="text-lg font-medium text-gray-900">Real-Time Tracking</h3>
               <p className="mt-2 text-base text-gray-600">
-                Monitor your packages with up-to-the-minute tracking information to always know where your shipment is.
+                Monitor your shipments with up-to-the-minute tracking information to always know where your delivery is.
               </p>
             </div>
           </div>
@@ -106,7 +105,7 @@ export default function Homepage() {
               </div>
               <h3 className="text-lg font-medium text-gray-900">Secure Deliveries</h3>
               <p className="mt-2 text-base text-gray-600">
-                Rest easy knowing your packages are handled with care and delivered securely to their destination.
+                Rest easy knowing your shipments are handled with care and delivered securely to their destination.
               </p>
             </div>
           </div>
@@ -139,16 +138,16 @@ export default function Homepage() {
               </p>
               <div className="mt-8 flex justify-center space-x-4">
                 <Link
-                  href="/packages/new"
+                  href="/shipments/new"
                   className="inline-block bg-white py-2.5 px-5 rounded-md text-blue-700 font-medium hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700"
                 >
-                  Create New Package
+                  Create New Shipment
                 </Link>
                 <Link
-                  href="/packages"
+                  href="/shipments"
                   className="inline-block bg-blue-600 py-2.5 px-5 border border-blue-400 rounded-md text-white font-medium hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700"
                 >
-                  View All Packages
+                  View All Shipments
                 </Link>
               </div>
             </div>
@@ -174,7 +173,7 @@ export default function Homepage() {
             <div className="bg-white rounded-lg shadow-md p-6 ml-4 border-l-4 border-blue-600">
               <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Create</h3>
               <p className="text-gray-600">
-                Create your package by entering the sender, receiver, and package details.
+                Create your shipment by entering the sender, receiver, and package details.
               </p>
             </div>
           </div>
@@ -187,7 +186,7 @@ export default function Homepage() {
             <div className="bg-white rounded-lg shadow-md p-6 ml-4 border-l-4 border-blue-600">
               <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Ship</h3>
               <p className="text-gray-600">
-                Print your shipping label and drop off your package at any of our locations.
+                Print your shipping label and drop off your shipment at any of our locations.
               </p>
             </div>
           </div>
@@ -200,7 +199,7 @@ export default function Homepage() {
             <div className="bg-white rounded-lg shadow-md p-6 ml-4 border-l-4 border-blue-600">
               <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Track</h3>
               <p className="text-gray-600">
-                Track your package in real-time as it makes its way to the destination.
+                Track your shipment in real-time as it makes its way to the destination.
               </p>
             </div>
           </div>
@@ -213,7 +212,7 @@ export default function Homepage() {
             <div className="bg-white rounded-lg shadow-md p-6 ml-4 border-l-4 border-blue-600">
               <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Deliver</h3>
               <p className="text-gray-600">
-                Your package is delivered safely and on time to the recipient.
+                Your shipment is delivered safely and on time to the recipient.
               </p>
             </div>
           </div>

@@ -23,14 +23,14 @@ export async function GET(
         email: true,
         role: true,
         cellphone: true,
-        packages: {
+        shipments: {
           select: {
             id: true,
             tracking_id: true,
             state: true,
             creation_date: true,
             destination_city: true,
-            destination_country: true,
+            destination_state: true,
           },
         },
         received: {
@@ -40,7 +40,7 @@ export async function GET(
             state: true,
             creation_date: true,
             origin_city: true,
-            origin_country: true,
+            origin_state: true,
           },
         },
       },
@@ -193,7 +193,7 @@ export async function DELETE(
     const existingUser = await prisma.user.findUnique({
       where: { id },
       include: {
-        packages: true,
+        shipments: true,
         received: true,
       },
     });
@@ -202,10 +202,10 @@ export async function DELETE(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
     
-    // Check if user has associated packages
-    if (existingUser.packages.length > 0 || existingUser.received.length > 0) {
+    // Check if user has associated shipments
+    if (existingUser.shipments.length > 0 || existingUser.received.length > 0) {
       return NextResponse.json({ 
-        error: 'Cannot delete user with associated packages. Remove packages first.' 
+        error: 'Cannot delete user with associated shipments. Remove shipments first.' 
       }, { status: 400 });
     }
     

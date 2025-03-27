@@ -1,6 +1,5 @@
-// This schema represents a package delivery/courier system
 datasource db {
-  provider = "postgresql" // You can change this to your preferred database provider
+  provider = "postgresql" 
   url      = env("DATABASE_URL")
 }
 
@@ -9,99 +8,146 @@ generator client {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  dni       String    @unique
-  cult      String
-  name      String
-  password  String?
-  email     String?
-  role      Role?
-  cellphone String?
-  packages  Package[] @relation("SenderPackages")
-  received  Package[] @relation("ReceiverPackages")
+  id              String      @id
+  dni             String?
+  cuit            String?
+  name            String
+  password        String?
+  email           String?
+  role            UserRole?
+  cellphone       String?
+  transportistShipments Shipment[] @relation("TransportistShipments")
 
   @@map("users")
 }
 
-enum Role {
+enum UserRole {
   ADMIN
-  USER
-  COURIER
+  TRANSPORTIST
+  EMPLOYEE
 }
 
-model Package {
-  id                    String            @id @default(uuid())
-  size                  String
-  weight                Float
-  tracking_id           String            @unique
-  state                 String
-  state_date            DateTime
-  creation_date         DateTime          @default(now())
-  courier_id            String?
-  sender_id             String
-  receiver_id           String
-  destination_zip_code  String
-  destination_street    String
-  destination_floor     String
-  destination_city      String
-  destination_state     String
-  destination_country   String
-  destination_apartment String?
-  destination_btw_st_1  String
-  destination_btw_st_2  String
-  origin_zip_code       String
-  origin_street         String
-  origin_floor          String
-  origin_city           String
-  origin_state          String
-  origin_country        String
-  origin_apartment      String
-  origin_btw_st_1       String
-  origin_btw_st_2       String
-  details               String?
-  units_value           Float
-  units_number          Int
-  package_type          String
+// Prisma schema with added sender and receiver information fields
+
+model Shipment {
+  id                      String            @id
+  tracking_id             String            @unique
+  state                   ShipmentState
+  state_date              DateTime
+  creation_date           DateTime          @default(now())
   
-  sender                User                @relation("SenderPackages", fields: [sender_id], references: [id])
-  receiver              User                @relation("ReceiverPackages", fields: [receiver_id], references: [id])
+  // Sender information
+  sender_name             String?
+  sender_dni              String?
+  sender_phone            String?
+  
+  // Receiver information
+  receiver_name           String?
+  receiver_dni            String?
+  receiver_phone          String?
+  
+  // Existing fields
+  courier_id              String?
+  transportist_id         String?
+  details                 String?
+  destination_zip_code    String
+  destination_street      String
+  destination_street_number String
+  destination_floor       String?
+  destination_apartment   String?
+  destination_city        String
+  destination_state       String
+  origin_zip_code         String
+  origin_street           String
+  origin_street_number    String
+  origin_floor            String?
+  origin_apartment        String?
+  origin_city             String
+  origin_state            String
+  payment                 PaymentStatus
+  
+  transportist          User?               @relation("TransportistShipments", fields: [transportist_id], references: [id])
   courier               Courier?            @relation(fields: [courier_id], references: [id])
-  courierPackages       CourierPackage[]
-  packageLogs           PackageLog[]
+  courierShipments      CourierShipment[]
+  shipmentLogs          ShipmentLog[]
+  packages              Package[]
 
-  @@map("packages")
+  @@map("shipments")
 }
 
-model PackageLog {
-  id           String   @id @default(uuid())
-  package_id   String
-  old_package  Json
-  new_package  Json
-  action       String
-  date         DateTime @default(now())
-  
-  package      Package  @relation(fields: [package_id], references: [id])
+enum ShipmentState {
+  CREATED
+  PICKED_UP
+  IN_TRANSIT
+  DELIVERED
+  RETURNED
+  CANCELLED
+}
 
-  @@map("package_log")
+enum PaymentStatus {
+  PAGO
+  NO_PAGO
+  PAGA_DESTINO
+}
+
+model ShipmentLog {
+  id             String      @id
+  shipment_id    String
+  old_shipment   Json
+  new_shipment   Json
+  action         LogAction
+  date           DateTime    @default(now())
+  
+  shipment       Shipment    @relation(fields: [shipment_id], references: [id])
+
+  @@map("shipment_log")
+}
+
+enum LogAction {
+  CREATE
+  DELETE
+  UPDATE
 }
 
 model Courier {
-  id               String           @id @default(uuid())
-  name             String
-  packages         Package[]
-  courierPackages  CourierPackage[]
+  id                String            @id
+  name              String
+  shipments         Shipment[]
+  courierShipments  CourierShipment[]
 
   @@map("couriers")
 }
 
-model CourierPackage {
-  id                String  @id @default(uuid())
-  package_id        String
-  courier_id        String
-  courier_package_id String  @unique
+model CourierShipment {
+  id                  String   @id
+  shipment_id         String
+  courier_id          String
+  courier_package_id  String
   
-  package           Package @relation(fields: [package_id], references: [id])
-  courier           Courier @relation(fields: [courier_id], references: [id])
+  shipment            Shipment @relation(fields: [shipment_id], references: [id])
+  courier             Courier  @relation(fields: [courier_id], references: [id])
 
-  @@map("couriers_packages")
+  @@map("courier_shipments")
+}
+
+model Package {
+  id           String      @id
+  weight       Float
+  height       Float?
+  width        Float?
+  length       Float?
+  shipment_id  String
+  package_type PackageType
+  
+  shipment     Shipment    @relation(fields: [shipment_id], references: [id])
+
+  @@map("packages")
+}
+
+enum PackageType {
+  DOCUMENT
+  PARCEL
+  FRAGILE
+  ELECTRONICS
+  PERISHABLE
 }

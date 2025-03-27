@@ -14,7 +14,7 @@ export async function GET(
     const courier = await prisma.courier.findUnique({
       where: { id },
       include: {
-        packages: {
+        shipments: {
           select: {
             id: true,
             tracking_id: true,
@@ -34,9 +34,9 @@ export async function GET(
             },
           },
         },
-        courierPackages: {
+        courierShipments: {
           include: {
-            package: {
+            shipment: {
               select: {
                 id: true,
                 tracking_id: true,
@@ -140,8 +140,8 @@ export async function DELETE(
     const existingCourier = await prisma.courier.findUnique({
       where: { id },
       include: {
-        packages: true,
-        courierPackages: true,
+        shipments: true,
+        courierShipments: true,
       },
     });
     
@@ -149,16 +149,16 @@ export async function DELETE(
       return NextResponse.json({ error: 'Courier not found' }, { status: 404 });
     }
     
-    // Check if courier has associated packages
-    if (existingCourier.packages.length > 0) {
+    // Check if courier has associated shipments
+    if (existingCourier.shipments.length > 0) {
       return NextResponse.json({ 
-        error: 'Cannot delete courier with associated packages. Update packages first.' 
+        error: 'Cannot delete courier with associated shipments. Update shipments first.' 
       }, { status: 400 });
     }
     
-    // Delete associated courier packages
-    if (existingCourier.courierPackages.length > 0) {
-      await prisma.courierPackage.deleteMany({
+    // Delete associated courier shipments
+    if (existingCourier.courierShipments.length > 0) {
+      await prisma.courierShipment.deleteMany({
         where: { courier_id: id },
       });
     }

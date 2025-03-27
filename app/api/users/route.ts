@@ -16,6 +16,15 @@ export async function GET(request: NextRequest) {
       // Find by DNI
       const user = await prisma.user.findUnique({
         where: { dni },
+        select: {
+          id: true,
+          dni: true,
+          cult: true,
+          name: true,
+          email: true,
+          role: true,
+          cellphone: true,
+        }
       });
       
       if (!user) {
@@ -29,6 +38,15 @@ export async function GET(request: NextRequest) {
       // Find by email
       const user = await prisma.user.findFirst({
         where: { email },
+        select: {
+          id: true,
+          dni: true,
+          cult: true,
+          name: true,
+          email: true,
+          role: true,
+          cellphone: true,
+        }
       });
       
       if (!user) {
@@ -64,20 +82,19 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
     
     // Check for required fields
-    const requiredFields = ['dni', 'cult', 'name'];
-    for (const field of requiredFields) {
-      if (!data[field]) {
-        return NextResponse.json({ error: `Missing required field: ${field}` }, { status: 400 });
-      }
+    if (!data.name) {
+      return NextResponse.json({ error: 'Missing required field: name' }, { status: 400 });
     }
     
     // Check if user with the same DNI already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { dni: data.dni },
-    });
-    
-    if (existingUser) {
-      return NextResponse.json({ error: 'User with this DNI already exists' }, { status: 409 });
+    if (data.dni) {
+      const existingUser = await prisma.user.findUnique({
+        where: { dni: data.dni },
+      });
+      
+      if (existingUser) {
+        return NextResponse.json({ error: 'User with this DNI already exists' }, { status: 409 });
+      }
     }
     
     // Hash password if provided
