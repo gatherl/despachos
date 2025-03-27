@@ -143,7 +143,7 @@ export default function ShipmentDetail({ shipmentId }: ShipmentDetailProps) {
       {/* Status Bar */}
       <div className="px-6 py-4 bg-gray-50 border-b flex flex-wrap justify-between items-center gap-4">
         <div>
-          <span className="text-sm text-gray-500">Tracking ID</span>
+          <span className="text-sm text-gray-500">Numero de Seguimiento</span>
           <h2 className="text-lg font-bold text-gray-900">{shipmentData.tracking_id}</h2>
         </div>
         

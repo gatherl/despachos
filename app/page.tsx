@@ -3,6 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Package, Truck, Search, ArrowRight, LogIn, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function Homepage() {
   const [trackingId, setTrackingId] = useState('');
@@ -22,22 +26,22 @@ export default function Homepage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-                Fast, Reliable Shipment Delivery
+              <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">
+                Envíos rápidos y confiables
               </h1>
               <p className="mt-4 text-lg md:text-xl text-blue-100">
-                Track your shipments in real-time and get updates every step of the way.
+                Sigue tus envíos en tiempo real y recibe actualizaciones en cada paso del camino.
               </p>
               
               {/* Quick Tracking Form */}
               <div className="mt-8">
                 <form onSubmit={handleTrackingSubmit} className="sm:flex">
                   <div className="min-w-0 flex-1">
-                    <label htmlFor="hero-tracking" className="sr-only">Tracking number</label>
+                    <label htmlFor="hero-tracking" className="sr-only">Número de seguimiento</label>
                     <input
                       id="hero-tracking"
                       type="text"
-                      placeholder="Enter your tracking number"
+                      placeholder="Ingresa tu número de seguimiento"
                       value={trackingId}
                       onChange={(e) => setTrackingId(e.target.value)}
                       className="block w-full rounded-md border-0 px-4 py-3 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -48,12 +52,12 @@ export default function Homepage() {
                       type="submit"
                       className="block w-full rounded-md bg-blue-500 py-3 px-4 font-medium text-white shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600"
                     >
-                      Track Shipment
+                      Rastrear Envío
                     </button>
                   </div>
                 </form>
                 <p className="mt-3 text-sm text-blue-200">
-                  Or visit our <Link href="/tracking" className="font-medium underline">tracking page</Link> for more options.
+                  O visita nuestra <Link href="/tracking" className="font-medium underline">página de seguimiento</Link> para más opciones.
                 </p>
               </div>
             </div>
@@ -70,84 +74,164 @@ export default function Homepage() {
         </div>
       </div>
       
-      {/* Features Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+      {/* Main Options Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-extrabold text-gray-900">Our Shipping Services</h2>
-          <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-            We offer comprehensive shipping solutions with real-time tracking and delivery confirmation.
+          <h2 className="text-3xl font-extrabold text-gray-900">¿Qué necesitas hacer hoy?</h2>
+          <p className="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+            Nuestra plataforma te ofrece todo lo que necesitas para gestionar tus envíos.
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Feature 1 */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-            <div className="p-6">
-              <div className="w-12 h-12 rounded-md bg-blue-100 flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-medium text-gray-900">Real-Time Tracking</h3>
-              <p className="mt-2 text-base text-gray-600">
-                Monitor your shipments with up-to-the-minute tracking information to always know where your delivery is.
+          {/* Option 1: Track Shipment */}
+          <Card className="shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+            <div className="h-2 bg-blue-600"></div>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center text-xl">
+                <Search className="mr-2 h-6 w-6 text-blue-600" />
+                Rastrear un Envío
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-gray-600">
+                Sigue tu paquete y obtén actualizaciones en tiempo real sobre su estado y ubicación.
               </p>
-            </div>
+              <Link href="/tracking" className="block">
+                <Button className="w-full group">
+                  Rastrear Ahora
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+          
+          {/* Option 2: Create Shipment */}
+          <Card className="shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+            <div className="h-2 bg-green-600"></div>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center text-xl">
+                <Plus className="mr-2 h-6 w-6 text-green-600" />
+                Crear un Envío
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-gray-600">
+                Crea una nueva solicitud de envío para que tus paquetes lleguen de forma rápida y segura.
+              </p>
+              <Link href="/shipments/new" className="block">
+                <Button className="w-full group bg-green-600 hover:bg-green-700">
+                  Crear Envío
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+          
+          {/* Option 3: Login */}
+          <Card className="shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+            <div className="h-2 bg-purple-600"></div>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center text-xl">
+                <LogIn className="mr-2 h-6 w-6 text-purple-600" />
+                Iniciar Sesión
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-gray-600">
+                Accede a tu cuenta para gestionar tus envíos, ver tu historial y administrar tu perfil.
+              </p>
+              <Link href="/login" className="block">
+                <Button className="w-full group bg-purple-600 hover:bg-purple-700">
+                  Iniciar Sesión
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+      
+      {/* Features Section */}
+      <div className="bg-gray-100 py-12 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-extrabold text-gray-900">Nuestros Servicios</h2>
+            <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+              Ofrecemos soluciones completas de envío con seguimiento en tiempo real y confirmación de entrega.
+            </p>
           </div>
           
-          {/* Feature 2 */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-            <div className="p-6">
-              <div className="w-12 h-12 rounded-md bg-green-100 flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="p-6">
+                <div className="w-12 h-12 rounded-md bg-blue-100 flex items-center justify-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">Seguimiento en Tiempo Real</h3>
+                <p className="mt-2 text-base text-gray-600">
+                  Monitorea tus envíos con información de seguimiento actualizada al minuto para siempre saber dónde está tu entrega.
+                </p>
               </div>
-              <h3 className="text-lg font-medium text-gray-900">Secure Deliveries</h3>
-              <p className="mt-2 text-base text-gray-600">
-                Rest easy knowing your shipments are handled with care and delivered securely to their destination.
-              </p>
             </div>
-          </div>
-          
-          {/* Feature 3 */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-            <div className="p-6">
-              <div className="w-12 h-12 rounded-md bg-yellow-100 flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            
+            {/* Feature 2 */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="p-6">
+                <div className="w-12 h-12 rounded-md bg-green-100 flex items-center justify-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">Entregas Seguras</h3>
+                <p className="mt-2 text-base text-gray-600">
+                  Descansa tranquilo sabiendo que tus envíos son manejados con cuidado y entregados de forma segura en su destino.
+                </p>
               </div>
-              <h3 className="text-lg font-medium text-gray-900">Affordable Rates</h3>
-              <p className="mt-2 text-base text-gray-600">
-                Competitive pricing on all our shipping services ensures you get the best value for your deliveries.
-              </p>
+            </div>
+            
+            {/* Feature 3 */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+              <div className="p-6">
+                <div className="w-12 h-12 rounded-md bg-yellow-100 flex items-center justify-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">Tarifas Accesibles</h3>
+                <p className="mt-2 text-base text-gray-600">
+                  Precios competitivos en todos nuestros servicios de envío que garantizan el mejor valor para tus entregas.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
       
       {/* CTA Section */}
-      <div className="bg-gray-100">
+      <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="bg-blue-700 rounded-2xl shadow-xl overflow-hidden">
             <div className="px-6 py-12 md:py-16 md:px-12 text-center text-white">
-              <h2 className="text-3xl font-extrabold">Ready to ship a package?</h2>
+              <h2 className="text-3xl font-extrabold">¿Listo para enviar un paquete?</h2>
               <p className="mt-4 text-lg text-blue-100 max-w-xl mx-auto">
-                Create an account today and start shipping packages with ease. Track all your deliveries in one place.
+                Crea una cuenta hoy y comienza a enviar paquetes con facilidad. Haz seguimiento de todas tus entregas en un solo lugar.
               </p>
-              <div className="mt-8 flex justify-center space-x-4">
+              <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
                 <Link
                   href="/shipments/new"
                   className="inline-block bg-white py-2.5 px-5 rounded-md text-blue-700 font-medium hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700"
                 >
-                  Create New Shipment
+                  Crear Nuevo Envío
                 </Link>
                 <Link
                   href="/shipments"
                   className="inline-block bg-blue-600 py-2.5 px-5 border border-blue-400 rounded-md text-white font-medium hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700"
                 >
-                  View All Shipments
+                  Ver Todos los Envíos
                 </Link>
               </div>
             </div>
@@ -158,9 +242,9 @@ export default function Homepage() {
       {/* How It Works Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-extrabold text-gray-900">How It Works</h2>
+          <h2 className="text-3xl font-extrabold text-gray-900">Cómo Funciona</h2>
           <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-            Our simple shipping process makes it easy to get your packages where they need to go.
+            Nuestro sencillo proceso de envío facilita que tus paquetes lleguen a donde necesitan ir.
           </p>
         </div>
         
@@ -171,9 +255,9 @@ export default function Homepage() {
               <span className="text-white font-bold">1</span>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 ml-4 border-l-4 border-blue-600">
-              <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Create</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Crear</h3>
               <p className="text-gray-600">
-                Create your shipment by entering the sender, receiver, and package details.
+                Crea tu envío ingresando los datos del remitente, destinatario y detalles del paquete.
               </p>
             </div>
           </div>
@@ -184,9 +268,9 @@ export default function Homepage() {
               <span className="text-white font-bold">2</span>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 ml-4 border-l-4 border-blue-600">
-              <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Ship</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Enviar</h3>
               <p className="text-gray-600">
-                Print your shipping label and drop off your shipment at any of our locations.
+                Imprime tu etiqueta de envío y deja tu paquete en cualquiera de nuestras ubicaciones.
               </p>
             </div>
           </div>
@@ -197,9 +281,9 @@ export default function Homepage() {
               <span className="text-white font-bold">3</span>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 ml-4 border-l-4 border-blue-600">
-              <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Track</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Rastrear</h3>
               <p className="text-gray-600">
-                Track your shipment in real-time as it makes its way to the destination.
+                Sigue tu envío en tiempo real mientras se dirige a su destino.
               </p>
             </div>
           </div>
@@ -210,9 +294,9 @@ export default function Homepage() {
               <span className="text-white font-bold">4</span>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 ml-4 border-l-4 border-blue-600">
-              <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Deliver</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2 mt-2">Entregar</h3>
               <p className="text-gray-600">
-                Your shipment is delivered safely and on time to the recipient.
+                Tu envío se entrega de forma segura y puntual al destinatario.
               </p>
             </div>
           </div>
@@ -224,37 +308,37 @@ export default function Homepage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">Company</h3>
+              <h3 className="text-lg font-semibold mb-4">Empresa</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-300 hover:text-white">About Us</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Careers</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">News</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Contact</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Sobre Nosotros</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Carreras</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Noticias</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Contacto</a></li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-4">Services</h3>
+              <h3 className="text-lg font-semibold mb-4">Servicios</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-300 hover:text-white">Domestic Shipping</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">International Shipping</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Express Delivery</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Bulk Shipping</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Envíos Nacionales</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Envíos Internacionales</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Entrega Express</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Envíos a Gran Escala</a></li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-4">Resources</h3>
+              <h3 className="text-lg font-semibold mb-4">Recursos</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-300 hover:text-white">Tracking Guide</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Shipping Rates</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">FAQ</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Support</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Guía de Seguimiento</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Tarifas de Envío</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Preguntas Frecuentes</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Soporte</a></li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold mb-4">Connect</h3>
+              <h3 className="text-lg font-semibold mb-4">Conéctate</h3>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-400 hover:text-white">
                   <svg fill="currentColor" viewBox="0 0 24 24" className="h-6 w-6">
@@ -273,18 +357,18 @@ export default function Homepage() {
                 </a>
               </div>
               <div className="mt-4">
-                <h4 className="text-sm font-semibold mb-2">Subscribe to our newsletter</h4>
+                <h4 className="text-sm font-semibold mb-2">Suscríbete a nuestro boletín</h4>
                 <form className="flex">
                   <input
                     type="email"
-                    placeholder="Email address"
+                    placeholder="Correo electrónico"
                     className="w-full px-4 py-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                   />
                   <button
                     type="submit"
                     className="px-4 py-2 bg-blue-600 rounded-r-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    Subscribe
+                    Suscribir
                   </button>
                 </form>
               </div>
@@ -292,7 +376,7 @@ export default function Homepage() {
           </div>
           
           <div className="mt-12 pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
-            <p>&copy; 2025 Shipping Company. All rights reserved.</p>
+            <p>&copy; 2025 Despachos Online. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>
