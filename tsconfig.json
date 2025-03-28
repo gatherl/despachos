@@ -23,8 +23,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"],
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  }
+  "exclude": ["node_modules"]
 }

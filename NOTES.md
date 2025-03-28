@@ -72,3 +72,10 @@ Logística Inversa Puerta a Puerta: 260708
 Logística Inversa Sucursal a Puerta: 260709
 CUIT
 30-53625919-4
+
+
+March 27th 2025
+1. app/api/couriers/ -> need to update the API to latest schema
+2. app/api/oca/shipments -> clean to latest schema and clean the default values
+3. users tmb actualizar
+4. Agregar cantidad de paquetes cuando son iguales
