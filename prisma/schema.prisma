@@ -1,5 +1,6 @@
+// prisma/schema.prisma
 datasource db {
-  provider = "postgresql" 
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -8,14 +9,16 @@ generator client {
 }
 
 model User {
-  id              String      @id
-  dni             String?
-  cuit            String?
-  name            String
-  password        String?
-  email           String?
-  role            UserRole?
-  cellphone       String?
+  id                    String     @id
+  dni                   String?
+  cuit                  String?
+  name                  String
+  first_name            String? // For backward compatibility, keep the name field
+  last_name             String? // For backward compatibility, keep the name field
+  password              String?
+  email                 String?
+  role                  UserRole?
+  cellphone             String?
   transportistShipments Shipment[] @relation("TransportistShipments")
 
   @@map("users")
@@ -27,50 +30,54 @@ enum UserRole {
   EMPLOYEE
 }
 
-// Prisma schema with added sender and receiver information fields
-
 model Shipment {
-  id                      String            @id
-  tracking_id             String            @unique
-  state                   ShipmentState
-  state_date              DateTime
-  creation_date           DateTime          @default(now())
-  
-  // Sender information
-  sender_name             String?
-  sender_dni              String?
-  sender_phone            String?
-  
-  // Receiver information
-  receiver_name           String?
-  receiver_dni            String?
-  receiver_phone          String?
-  
+  id            String        @id
+  tracking_id   String        @unique
+  state         ShipmentState
+  state_date    DateTime
+  creation_date DateTime      @default(now())
+
+  // Sender information - Updated fields
+  sender_name       String? // Keep for backward compatibility
+  sender_first_name String?
+  sender_last_name  String?
+  sender_dni        String?
+  sender_phone      String?
+  sender_email      String?
+
+  // Receiver information - Updated fields
+  receiver_name       String? // Keep for backward compatibility
+  receiver_first_name String?
+  receiver_last_name  String?
+  receiver_dni        String?
+  receiver_phone      String?
+  receiver_email      String?
+
   // Existing fields
-  courier_id              String?
-  transportist_id         String?
-  details                 String?
-  destination_zip_code    String
-  destination_street      String
+  courier_id                String?
+  transportist_id           String?
+  details                   String?
+  destination_zip_code      String
+  destination_street        String
   destination_street_number String
-  destination_floor       String?
-  destination_apartment   String?
-  destination_city        String
-  destination_state       String
-  origin_zip_code         String
-  origin_street           String
-  origin_street_number    String
-  origin_floor            String?
-  origin_apartment        String?
-  origin_city             String
-  origin_state            String
-  payment                 PaymentStatus
-  
-  transportist          User?               @relation("TransportistShipments", fields: [transportist_id], references: [id])
-  courier               Courier?            @relation(fields: [courier_id], references: [id])
-  courierShipments      CourierShipment[]
-  shipmentLogs          ShipmentLog[]
-  packages              Package[]
+  destination_floor         String?
+  destination_apartment     String?
+  destination_city          String
+  destination_state         String
+  origin_zip_code           String
+  origin_street             String
+  origin_street_number      String
+  origin_floor              String?
+  origin_apartment          String?
+  origin_city               String
+  origin_state              String
+  payment                   PaymentStatus
+
+  transportist     User?             @relation("TransportistShipments", fields: [transportist_id], references: [id])
+  courier          Courier?          @relation(fields: [courier_id], references: [id])
+  courierShipments CourierShipment[]
+  shipmentLogs     ShipmentLog[]
+  packages         Package[]
 
   @@map("shipments")
 }
@@ -91,14 +98,14 @@ enum PaymentStatus {
 }
 
 model ShipmentLog {
-  id             String      @id
-  shipment_id    String
-  old_shipment   Json
-  new_shipment   Json
-  action         LogAction
-  date           DateTime    @default(now())
-  
-  shipment       Shipment    @relation(fields: [shipment_id], references: [id])
+  id           String    @id
+  shipment_id  String
+  old_shipment Json
+  new_shipment Json
+  action       LogAction
+  date         DateTime  @default(now())
+
+  shipment Shipment @relation(fields: [shipment_id], references: [id])
 
   @@map("shipment_log")
 }
@@ -110,22 +117,22 @@ enum LogAction {
 }
 
 model Courier {
-  id                String            @id
-  name              String
-  shipments         Shipment[]
-  courierShipments  CourierShipment[]
+  id               String            @id
+  name             String
+  shipments        Shipment[]
+  courierShipments CourierShipment[]
 
   @@map("couriers")
 }
 
 model CourierShipment {
-  id                  String   @id
-  shipment_id         String
-  courier_id          String
-  courier_package_id  String
-  
-  shipment            Shipment @relation(fields: [shipment_id], references: [id])
-  courier             Courier  @relation(fields: [courier_id], references: [id])
+  id                 String @id
+  shipment_id        String
+  courier_id         String
+  courier_package_id String
+
+  shipment Shipment @relation(fields: [shipment_id], references: [id])
+  courier  Courier  @relation(fields: [courier_id], references: [id])
 
   @@map("courier_shipments")
 }
@@ -138,8 +145,8 @@ model Package {
   length       Float?
   shipment_id  String
   package_type PackageType
-  
-  shipment     Shipment    @relation(fields: [shipment_id], references: [id])
+
+  shipment Shipment @relation(fields: [shipment_id], references: [id])
 
   @@map("packages")
 }
